@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
+    --brand-green: #10332C;
+    --brand-gold: #C99E69;
+    --brand-mint: #5CD1A9;
+    --brand-light: #F8FAF9;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: #F8FAF9;
+    color: #162E27;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Custom scrollbars in Friday Store green tone */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #EBF4F0;
+}
+::-webkit-scrollbar-thumb {
+  background: #17463B;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #10332C;
+}
+
+/* Gradient helpers */
+.bg-gradient-friday {
+  background: linear-gradient(135deg, #10332C 0%, #1A4C40 50%, #226353 100%);
+}
+
+.bg-gradient-friday-light {
+  background: linear-gradient(180deg, #EBF4F0 0%, #F6FAF8 50%, #F8FAF9 100%);
+}

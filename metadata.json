@@ -1,0 +1,6 @@
+{
+  "name": "Friday Store – Boutique en Ligne Sénégal",
+  "description": "Boutique en ligne multi-produits et dropshipping au Sénégal : Électronique, électroménager, vaisselle, déco maison et gadgets tendance. Livraison express à Dakar et dans toutes les régions, paiement Wave, Orange Money et à la livraison.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,257 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Utilisateur Friday Store avec rôle et statut",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID Firebase de l'utilisateur"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 160,
+          "description": "Adresse email de l'utilisateur"
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 160,
+          "description": "Nom complet de l'utilisateur"
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 32,
+          "description": "Numéro de téléphone sénégalais"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "admin", "manager"],
+          "description": "Rôle de l'utilisateur"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "suspended"],
+          "description": "Statut du compte"
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Adresse de livraison principale"
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "Ville ou quartier au Sénégal"
+        },
+        "avatarUrl": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "URL photo de profil"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Date de création ISO"
+        },
+        "lastLogin": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Dernière connexion ISO"
+        }
+      },
+      "required": ["id", "email", "displayName", "phone", "role", "status", "createdAt"]
+    },
+    "DeletedUser": {
+      "title": "DeletedUser",
+      "description": "Marqueur sans données personnelles empêchant la réactivation d'un compte supprimé",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "deletedAt": { "type": "string", "maxLength": 64 },
+        "deletedBy": { "type": "string", "maxLength": 128 },
+        "authDeleted": { "type": "boolean" }
+      },
+      "required": ["id", "deletedAt", "deletedBy", "authDeleted"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Produit dropshipping généraliste Friday Store",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "maxLength": 160 },
+        "slug": { "type": "string", "maxLength": 160 },
+        "category": {
+          "type": "string",
+          "enum": ["electronique", "electromenager", "vaisselle", "deco-maison", "gadgets"]
+        },
+        "price": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "description": { "type": "string", "maxLength": 5000 },
+        "shortDescription": { "type": "string", "maxLength": 240 },
+        "richSections": { "type": "array", "description": "Blocs dynamiques texte/images de la description longue" },
+        "stockCount": { "type": "number" },
+        "inStock": { "type": "boolean" },
+        "isFeatured": { "type": "boolean" },
+        "isNew": { "type": "boolean" },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "number" },
+        "sku": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "name", "slug", "category", "price", "description", "shortDescription", "stockCount", "inStock", "isFeatured", "isNew", "rating", "reviewCount", "sku"]
+    },
+    "PromoCode": {
+      "title": "PromoCode",
+      "description": "Code promotionnel géré par l'administrateur",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "maxLength": 32 },
+        "discountType": { "type": "string", "enum": ["percentage", "fixed"] },
+        "value": { "type": "number" },
+        "minOrderAmount": { "type": "number" },
+        "description": { "type": "string", "maxLength": 240 },
+        "active": { "type": "boolean" }
+      },
+      "required": ["code", "discountType", "value", "description"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Commande client Friday Store avec isolation PII",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "orderNumber": { "type": "string", "maxLength": 32, "pattern": "^FS-\\d{2}-\\d{4}$" },
+        "userId": { "type": "string", "maxLength": 128 },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "deliveryFee": { "type": "number" },
+        "total": { "type": "number" },
+        "appliedPromo": { "type": "string", "maxLength": 32 },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "confirmed", "shipping", "delivered", "cancelled"]
+        },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "orderNumber", "subtotal", "discount", "deliveryFee", "total", "status", "createdAt"]
+    },
+    "OrderTracking": {
+      "title": "OrderTracking",
+      "description": "Suivi public sans données personnelles indexé par numéro de commande",
+      "type": "object",
+      "properties": {
+        "orderNumber": { "type": "string", "maxLength": 32, "pattern": "^FS-\\d{2}-\\d{4}$" },
+        "orderId": { "type": "string", "maxLength": 128 },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "confirmed", "shipping", "delivered", "cancelled"]
+        },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 },
+        "total": { "type": "number" },
+        "itemCount": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["wave", "orange_money", "cod"] },
+        "zoneName": { "type": "string", "maxLength": 160 }
+      },
+      "required": ["orderNumber", "orderId", "status", "createdAt", "updatedAt", "total", "itemCount", "paymentMethod", "zoneName"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Table de vérification d'administrateur",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 160 },
+        "assignedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["uid", "email"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Notification automatique temps réel (nouvelle commande, changement de statut, alerte stock)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "recipientScope": { "type": "string", "enum": ["admin", "user"] },
+        "userId": { "type": "string", "maxLength": 128 },
+        "type": { "type": "string", "enum": ["order_created", "order_status", "low_stock", "system"] },
+        "title": { "type": "string", "maxLength": 160 },
+        "message": { "type": "string", "maxLength": 500 },
+        "orderNumber": { "type": "string", "maxLength": 32, "pattern": "^FS-\\d{2}-\\d{4}$" },
+        "orderId": { "type": "string", "maxLength": 128 },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "recipientScope", "type", "title", "message", "read", "createdAt"]
+    },
+    "NotificationSettings": {
+      "title": "NotificationSettings",
+      "description": "Configuration administrateur des notifications automatiques et webhook externe",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "webhookEnabled": { "type": "boolean" },
+        "webhookUrl": { "type": "string", "maxLength": 500 },
+        "notifyOnNewOrder": { "type": "boolean" },
+        "notifyOnStatusChange": { "type": "boolean" },
+        "notifyOnLowStock": { "type": "boolean" },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "webhookEnabled", "notifyOnNewOrder", "notifyOnStatusChange", "notifyOnLowStock", "updatedAt"]
+    },
+    "CloudinarySettings": {
+      "title": "CloudinarySettings",
+      "description": "Configuration publique Cloudinary (Cloud Name et Upload Preset Unsigned) gérée par l'administrateur",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "cloudName": { "type": "string", "maxLength": 100 },
+        "uploadPreset": { "type": "string", "maxLength": 120 },
+        "folder": { "type": "string", "maxLength": 120 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "cloudName", "uploadPreset", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Profils utilisateurs et gestion RBAC"
+    },
+    "/deletedUsers/{userId}": {
+      "schema": { "$ref": "#/entities/DeletedUser" },
+      "description": "Index de révocation sans PII bloquant toute reconnexion ou recréation d'un compte supprimé"
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Catalogue de produits géré par les administrateurs"
+    },
+    "/promoCodes/{codeId}": {
+      "schema": { "$ref": "#/entities/PromoCode" },
+      "description": "Codes promo actifs de la boutique"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Commandes clients avec restrictions d'accès par propriétaire ou admin"
+    },
+    "/orderTracking/{trackingId}": {
+      "schema": { "$ref": "#/entities/OrderTracking" },
+      "description": "Projection publique sans PII pour suivi de colis par référence exacte"
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/Admin" },
+      "description": "Indexation sécurisée des administrateurs pour RBAC Firestore"
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "Notifications automatiques en temps réel pour les admins et clients"
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/NotificationSettings" },
+      "description": "Paramètres globaux admin (notifications/webhooks et configuration médias Cloudinary)"
+    }
+  }
+}
